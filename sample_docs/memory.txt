@@ -1,0 +1,5 @@
+Memory is durable state that survives the current chat.
+
+For agent work, a useful memory system often looks like a task graph. Each task
+has an id, status, and dependencies. Ready-task detection answers one simple
+question: what can be worked on now?

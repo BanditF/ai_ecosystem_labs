@@ -1,0 +1,23 @@
+Term Count Skill
+================
+
+Use this when the user asks where a concept appears in local project docs.
+
+Inputs
+------
+- A search term.
+- A short list of files or folders to inspect.
+
+Procedure
+---------
+1. Prefer specific docs files over searching the whole repository.
+2. Call the term_count tool through the JSON wrapper.
+3. Report the top matches with file paths and counts.
+4. If the count is zero, try one closely related term once.
+5. Do not treat a high count as proof of quality or correctness.
+
+Validation
+----------
+- The output includes the exact term searched.
+- The output lists the files inspected.
+- Tool failures are reported plainly instead of hidden.

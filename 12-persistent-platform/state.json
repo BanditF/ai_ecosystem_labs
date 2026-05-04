@@ -1,0 +1,26 @@
+{
+  "assistant_name": "toy-platform",
+  "channels": {
+    "cli": {
+      "kind": "interactive",
+      "messages": 0
+    },
+    "companion": {
+      "kind": "async",
+      "messages": 0
+    },
+    "ops": {
+      "kind": "worker",
+      "messages": 0
+    }
+  },
+  "memory": [],
+  "searches": [],
+  "delegations": [],
+  "schedules": [],
+  "next_ids": {
+    "memory": 1,
+    "schedule": 1,
+    "delegation": 1
+  }
+}

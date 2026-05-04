@@ -1,0 +1,34 @@
+{
+  "tasks": [
+    {
+      "id": "write-wrapper",
+      "title": "Write JSON wrapper",
+      "status": "done",
+      "deps": []
+    },
+    {
+      "id": "add-hook",
+      "title": "Add pre-tool hook",
+      "status": "pending",
+      "deps": [
+        "write-wrapper"
+      ]
+    },
+    {
+      "id": "agent-loop",
+      "title": "Wire agent loop",
+      "status": "pending",
+      "deps": [
+        "add-hook"
+      ]
+    },
+    {
+      "id": "log-calls",
+      "title": "Log tool calls",
+      "status": "pending",
+      "deps": [
+        "agent-loop"
+      ]
+    }
+  ]
+}

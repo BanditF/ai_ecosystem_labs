@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+import json
+import pathlib
+
+
+FILES = ["labs/sample_docs/agents.txt", "labs/sample_docs/protocols.txt", "labs/sample_docs/memory.txt"]
+
+
+def term_count(term, files):
+    items = []
+    total = 0
+    for name in files:
+        text = pathlib.Path(name).read_text(encoding="utf-8", errors="ignore").lower()
+        count = text.count(term.lower())
+        items.append({"file": name, "count": count})
+        total += count
+    return {"ok": True, "items": items, "summary": {"total": total}}
+
+
+def decide_next_step(state):
+    if not state["steps"]:
+        return {
+            "type": "tool_call",
+            "tool": "term_count",
+            "arguments": {"term": state["term"], "files": FILES},
+            "reason": "Need evidence before answering.",
+        }
+    total = state["steps"][-1]["result"]["summary"]["total"]
+    return {
+        "type": "done",
+        "answer": f"Found {total} mentions of {state['term']!r} across sample docs.",
+    }
+
+
+def main():
+    state = {"goal": "Find where the docs discuss agents.", "term": "agent", "steps": []}
+    while True:
+        decision = decide_next_step(state)
+        if decision["type"] == "done":
+            state["final"] = decision["answer"]
+            break
+        if decision["tool"] == "term_count":
+            result = term_count(decision["arguments"]["term"], decision["arguments"]["files"])
+        else:
+            result = {"ok": False, "error": "unknown_tool"}
+        state["steps"].append({"decision": decision, "result": result})
+
+    print(json.dumps(state, indent=2))
+
+
+if __name__ == "__main__":
+    main()

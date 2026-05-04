@@ -1,0 +1,8 @@
+An agent is a loop, not a magic object.
+
+It observes a request, decides what to do next, acts through a tool, and checks
+the result. The useful boundary is not whether the system feels smart. The
+useful boundary is whether each step can be inspected, repeated, and stopped.
+
+Local host agents usually combine a chat interface, a tool registry, approval
+prompts, context gathering, and a small amount of state.

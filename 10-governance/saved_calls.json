@@ -1,0 +1,23 @@
+[
+  {
+    "actor": "toy-agent",
+    "tool": "term_count",
+    "arguments": {"term": "agent", "files": ["labs/sample_docs/agents.txt"]},
+    "policy": {"allowed": true, "reason": "read-only docs query"},
+    "result": {"ok": true, "summary": {"total": 4}}
+  },
+  {
+    "actor": "toy-agent",
+    "tool": "term_count",
+    "arguments": {"term": "secret", "files": ["labs/sample_docs/agents.txt"]},
+    "policy": {"allowed": false, "reason": "sensitive search term"},
+    "result": {"ok": false, "error": "blocked_by_policy"}
+  },
+  {
+    "actor": "toy-agent",
+    "tool": "term_count",
+    "arguments": {"term": "protocol", "files": ["labs/sample_docs/protocols.txt"]},
+    "policy": {"allowed": true, "reason": "read-only docs query"},
+    "result": {"ok": true}
+  }
+]

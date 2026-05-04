@@ -1,0 +1,17 @@
+{
+  "listen_host": "127.0.0.1",
+  "listen_port": 8791,
+  "mode": "proxy",
+  "upstream_base_url": "https://api.openai.com",
+  "allowed_paths": [
+    "/v1/chat/completions",
+    "/v1/responses"
+  ],
+  "client_token_env": "BROKER_CLIENT_TOKEN",
+  "secret_source": {
+    "kind": "command",
+    "argv": ["az", "keyvault", "secret", "show", "--vault-name", "MY_VAULT", "--name", "openai-api-key", "--query", "value", "-o", "tsv"]
+  },
+  "max_request_bytes": 262144,
+  "upstream_timeout_seconds": 30
+}

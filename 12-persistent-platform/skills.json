@@ -1,0 +1,34 @@
+[
+  {
+    "name": "remember_note",
+    "kind": "memory",
+    "trigger_prefix": "remember ",
+    "description": "Store a note in durable memory."
+  },
+  {
+    "name": "search_docs",
+    "kind": "tool",
+    "trigger_prefix": "search ",
+    "description": "Search the sample docs through the JSON-wrapper tool.",
+    "requires_approval": true
+  },
+  {
+    "name": "delegate_search",
+    "kind": "routing",
+    "trigger_prefix": "delegate search ",
+    "description": "Route a doc search through a toy docs-worker delegation.",
+    "requires_approval": true
+  },
+  {
+    "name": "schedule_digest",
+    "kind": "schedule",
+    "trigger_prefix": "schedule digest",
+    "description": "Queue one digest job for the companion channel."
+  },
+  {
+    "name": "help",
+    "kind": "system",
+    "trigger_prefix": "help",
+    "description": "Show the available channels and skills."
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "listen_host": "127.0.0.1",
+  "listen_port": 8791,
+  "mode": "dry_run",
+  "upstream_base_url": "https://api.openai.example",
+  "allowed_paths": [
+    "/v1/chat/completions",
+    "/v1/responses",
+    "/v1/embeddings"
+  ],
+  "secret_source": {
+    "kind": "none"
+  },
+  "max_request_bytes": 262144,
+  "upstream_timeout_seconds": 30
+}

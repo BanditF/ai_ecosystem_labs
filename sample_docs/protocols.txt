@@ -1,0 +1,6 @@
+Protocols make tools easier to discover and call.
+
+A protocol adapter can list available tools, describe their input schema, and
+accept structured calls. MCP is a production protocol in this family. The toy
+protocol in these labs is deliberately smaller: JSON in, JSON out, one request
+per line.
