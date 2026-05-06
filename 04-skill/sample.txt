@@ -1,0 +1,3 @@
+An agent can use a tool.
+A good Agent also remembers context.
+Sometimes an agent delegates work to another helper.

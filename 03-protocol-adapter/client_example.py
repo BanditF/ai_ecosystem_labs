@@ -2,7 +2,10 @@
 import json
 import subprocess
 import sys
+from pathlib import Path
 
+
+ROOT = Path(__file__).resolve().parents[1]
 
 REQUESTS = [
     {"id": 1, "method": "tools/list"},
@@ -13,7 +16,7 @@ REQUESTS = [
             "name": "term_count",
             "arguments": {
                 "term": "agent",
-                "files": ["labs/sample_docs/agents.txt", "labs/sample_docs/protocols.txt"],
+                "files": [str(ROOT / "sample_docs/agents.txt"), str(ROOT / "sample_docs/protocols.txt")],
             },
         },
     },
@@ -23,7 +26,7 @@ REQUESTS = [
 def main():
     payload = "\n".join(json.dumps(request) for request in REQUESTS) + "\n"
     result = subprocess.run(
-        [sys.executable, "labs/03-protocol-adapter/protocol_server.py"],
+        [sys.executable, str(ROOT / "03-protocol-adapter/protocol_server.py")],
         input=payload,
         text=True,
         capture_output=True,

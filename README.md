@@ -28,7 +28,7 @@ Each lab is a deliberately small Python script that builds one piece of the AI t
 No external dependencies required for most labs — they use a toy model backend so you can run them without an API key. Labs 12 and 13 have their own notes.
 
 ```bash
-python3 labs/00-model-access/model_cli.py "hello"
+python3 00-model-access/model_cli.py "hello"
 ```
 
 Run all labs in sequence:

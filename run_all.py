@@ -4,6 +4,14 @@ import subprocess
 import sys
 import time
 import urllib.request
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parent
+
+
+def rel(path):
+    return str(ROOT / path)
 
 
 def run(label, command, expect=0):
@@ -15,7 +23,7 @@ def run(label, command, expect=0):
         print(result.stderr.strip(), file=sys.stderr)
     if result.returncode != expect:
         raise SystemExit(
-            f"{label} exited {result.returncode}, expected {expect}: {' '.join(command)}"
+            f"{label} exited {result.returncode}, expected {expect}: {' '.join(map(str, command))}"
         )
 
 
@@ -28,7 +36,7 @@ def run_json(label, command, expect=0):
         if result.stderr:
             print(result.stderr.strip(), file=sys.stderr)
         raise SystemExit(
-            f"{label} exited {result.returncode}, expected {expect}: {' '.join(command)}"
+            f"{label} exited {result.returncode}, expected {expect}: {' '.join(map(str, command))}"
         )
     parsed = json.loads(result.stdout)
     print(json.dumps(parsed, indent=2))
@@ -38,7 +46,7 @@ def run_json(label, command, expect=0):
 def run_local_broker(py):
     print("\n== 13 local broker dry run")
     process = subprocess.Popen(
-        [py, "labs/13-local-broker/broker.py", "--config", "labs/13-local-broker/broker_config.dry-run.json"],
+        [py, rel("13-local-broker/broker.py"), "--config", rel("13-local-broker/broker_config.dry-run.json")],
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -83,33 +91,35 @@ def run_local_broker(py):
 
 def main():
     py = sys.executable
-    run("reset workspace", [py, "labs/reset.py"])
+    run("reset workspace", [py, rel("reset.py")])
     run_json(
         "00 model access",
-        [py, "labs/00-model-access/model_cli.py", "Hello from the lab", "--json"],
+        [py, rel("00-model-access/model_cli.py"), "Hello from the lab", "--json"],
     )
-    run("01 dumb CLI", [py, "labs/01-cli/term_count.py", "agent", "labs/sample_docs/agents.txt"])
+    run("01 dumb CLI", [py, rel("01-cli/term_count.py"), "agent", rel("sample_docs/agents.txt")])
     run_json(
         "02 JSON wrapper",
-        [py, "labs/02-json-wrapper/term_count_json.py", "agent", "labs/sample_docs/agents.txt"],
+        [py, rel("02-json-wrapper/term_count_json.py"), "agent", rel("sample_docs/agents.txt")],
     )
-    run("03 protocol adapter", [py, "labs/03-protocol-adapter/client_example.py"])
-    print("\n== 04 skill file")
-    print("labs/04-skill/term-count.skill.txt")
-    run_json("05 hook allows safe call", [py, "labs/05-hook/hook_runner.py", "agent"])
-    run_json("05 hook blocks sensitive call", [py, "labs/05-hook/hook_runner.py", "secret"], expect=1)
-    run_json("06 agent loop", [py, "labs/06-agent-loop/agent_loop.py"])
-    run_json("07 task graph ready", [py, "labs/07-task-graph/task_graph.py", "ready"])
-    run_json("08 coordinator claim", [py, "labs/08-coordinator/coordinator.py", "claim", "docs-worker", "docs"])
-    run_json("09 host lists tools", [py, "labs/09-host-cli/host_cli.py", "tools"])
+    run("03 protocol adapter", [py, rel("03-protocol-adapter/client_example.py")])
+    run_json(
+        "04 skill runner",
+        [py, rel("04-skill/skill_runner.py"), "--term", "agent", "--path", rel("04-skill/sample.txt")],
+    )
+    run_json("05 hook allows safe call", [py, rel("05-hook/hook_runner.py"), "agent"])
+    run_json("05 hook blocks sensitive call", [py, rel("05-hook/hook_runner.py"), "secret"], expect=1)
+    run_json("06 agent loop", [py, rel("06-agent-loop/agent_loop.py")])
+    run_json("07 task graph ready", [py, rel("07-task-graph/task_graph.py"), "ready"])
+    run_json("08 coordinator claim", [py, rel("08-coordinator/coordinator.py"), "claim", "docs-worker", "docs"])
+    run_json("09 host lists tools", [py, rel("09-host-cli/host_cli.py"), "tools"])
     run_json(
         "09 host requires approval",
         [
             py,
-            "labs/09-host-cli/host_cli.py",
+            rel("09-host-cli/host_cli.py"),
             "run",
             "term_count",
-            '{"term":"agent","files":["labs/sample_docs/agents.txt"]}',
+            json.dumps({"term": "agent", "files": [rel("sample_docs/agents.txt")]}),
         ],
         expect=2,
     )
@@ -117,38 +127,38 @@ def main():
         "09 host approved run",
         [
             py,
-            "labs/09-host-cli/host_cli.py",
+            rel("09-host-cli/host_cli.py"),
             "run",
             "term_count",
-            '{"term":"agent","files":["labs/sample_docs/agents.txt"]}',
+            json.dumps({"term": "agent", "files": [rel("sample_docs/agents.txt")]}),
             "--approve",
         ],
     )
-    run_json("10 governance evals surface a failure", [py, "labs/10-governance/eval_runner.py"], expect=1)
-    run_json("11 capstone flow", [py, "labs/11-capstone/capstone.py"])
-    run_json("12 platform status", [py, "labs/12-persistent-platform/gateway.py", "status"])
+    run_json("10 governance evals surface a failure", [py, rel("10-governance/eval_runner.py")], expect=1)
+    run_json("11 capstone flow", [py, rel("11-capstone/capstone.py")])
+    run_json("12 platform status", [py, rel("12-persistent-platform/gateway.py"), "status"])
     run_json(
         "12 platform remember note",
-        [py, "labs/12-persistent-platform/gateway.py", "message", "cli", "remember that persistent assistants bundle many layers"],
+        [py, rel("12-persistent-platform/gateway.py"), "message", "cli", "remember that persistent assistants bundle many layers"],
     )
     run_json(
         "12 platform search requires approval",
-        [py, "labs/12-persistent-platform/gateway.py", "message", "cli", "search agent"],
+        [py, rel("12-persistent-platform/gateway.py"), "message", "cli", "search agent"],
         expect=2,
     )
     run_json(
         "12 platform approved search",
-        [py, "labs/12-persistent-platform/gateway.py", "message", "cli", "search agent", "--approve"],
+        [py, rel("12-persistent-platform/gateway.py"), "message", "cli", "search agent", "--approve"],
     )
     run_json(
         "12 platform delegated search",
-        [py, "labs/12-persistent-platform/gateway.py", "message", "cli", "delegate search memory", "--approve"],
+        [py, rel("12-persistent-platform/gateway.py"), "message", "cli", "delegate search memory", "--approve"],
     )
     run_json(
         "12 platform schedule digest",
-        [py, "labs/12-persistent-platform/gateway.py", "message", "companion", "schedule digest"],
+        [py, rel("12-persistent-platform/gateway.py"), "message", "companion", "schedule digest"],
     )
-    run_json("12 platform tick", [py, "labs/12-persistent-platform/gateway.py", "tick"])
+    run_json("12 platform tick", [py, rel("12-persistent-platform/gateway.py"), "tick"])
     run_local_broker(py)
     print("\nAll lab smoke checks ran. Some artifacts were intentionally written for inspection.")
 
