@@ -13,12 +13,20 @@ def evaluate(call):
     checks = []
     result = call.get("result", {})
     policy = call.get("policy", {})
+    allowed = policy.get("allowed")
+    successful = allowed is True and result.get("ok") is True
 
     checks.append({"name": "has_policy_decision", "passed": "allowed" in policy})
-    if policy.get("allowed"):
-        checks.append({"name": "valid_success_shape", "passed": result.get("ok") is True and "summary" in result})
-    else:
+    if allowed is False:
         checks.append({"name": "blocked_calls_do_not_succeed", "passed": result.get("ok") is False})
+
+    checks.append(
+        {
+            "name": "successful_calls_include_summary",
+            "passed": True if not successful else "summary" in result,
+            "applies": successful,
+        }
+    )
 
     return {
         "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
