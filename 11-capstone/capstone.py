@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+import argparse
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -13,11 +15,18 @@ TASK_GRAPH_PATH = REPO_ROOT / "07-task-graph" / "tasks.json"
 PROTOCOL_SERVER_PATH = REPO_ROOT / "03-protocol-adapter" / "protocol_server.py"
 OUTPUT_PATH = LAB_ROOT / "capstone_run.json"
 SAMPLE_FILES = [str(SAMPLE_DOCS / "agents.txt"), str(SAMPLE_DOCS / "protocols.txt")]
+DEFAULT_BLOCKED_TERMS = {"password", "secret", "token"}
 
 
-def approve_tool_call(arguments):
+def blocked_terms(block_term=None):
+    if block_term:
+        return {block_term.lower()}
+    return DEFAULT_BLOCKED_TERMS
+
+
+def approve_tool_call(arguments, block_term=None):
     term = arguments.get("term", "").lower()
-    if term in {"password", "secret", "token"}:
+    if term in blocked_terms(block_term):
         return {"allowed": False, "reason": "sensitive term"}
     if not all(pathlib.Path(path).resolve().parent == SAMPLE_DOCS.resolve() for path in arguments.get("files", [])):
         return {"allowed": False, "reason": "only sample docs are allowed"}
@@ -65,7 +74,18 @@ def evaluate(record):
     return {"passed": all(check["passed"] for check in checks), "checks": checks}
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--block-term",
+        default=os.environ.get("BLOCK_TERM"),
+        help="Override the blocked term at runtime. Defaults to BLOCK_TERM or the built-in sensitive terms.",
+    )
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
     arguments = {"term": "agent", "files": SAMPLE_FILES}
     record = {
         "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -73,7 +93,11 @@ def main():
         "host": {"approved_by": "toy-user"},
         "tool": "term_count",
         "arguments": arguments,
-        "policy": approve_tool_call(arguments),
+        "policy": approve_tool_call(arguments, block_term=args.block_term),
+        "policy_config": {
+            "block_term": args.block_term,
+            "effective_blocked_terms": sorted(blocked_terms(args.block_term)),
+        },
         "ready_tasks": ready_tasks(),
     }
 

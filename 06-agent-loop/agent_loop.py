@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import json
 import pathlib
 
@@ -39,9 +40,31 @@ def decide_next_step(state):
     }
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--max-steps",
+        type=int,
+        default=10,
+        help="Maximum number of loop steps before stopping (default: 10).",
+    )
+    return parser.parse_args()
+
+
 def main():
-    state = {"goal": "Find where the docs discuss agents.", "term": "agent", "steps": []}
+    args = parse_args()
+    state = {
+        "goal": "Find where the docs discuss agents.",
+        "term": "agent",
+        "steps": [],
+        "max_steps": args.max_steps,
+    }
+
     while True:
+        if len(state["steps"]) >= args.max_steps:
+            state["final"] = f"Step limit reached after {args.max_steps} steps."
+            break
+
         decision = decide_next_step(state)
         if decision["type"] == "done":
             state["final"] = decision["answer"]
