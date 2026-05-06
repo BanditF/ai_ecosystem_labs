@@ -12,8 +12,9 @@ import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 
-ROOT = pathlib.Path("labs/13-local-broker")
+ROOT = pathlib.Path(__file__).resolve().parent
 EVENTS_PATH = ROOT / "events.jsonl"
+DEFAULT_CONFIG_PATH = ROOT / "broker_config.dry-run.json"
 
 
 def now():
@@ -212,7 +213,7 @@ def build_server(config):
 
 def main():
     parser = argparse.ArgumentParser(description="Toy localhost capability broker.")
-    parser.add_argument("--config", default="labs/13-local-broker/broker_config.dry-run.json")
+    parser.add_argument("--config", default=str(DEFAULT_CONFIG_PATH))
     args = parser.parse_args()
 
     config = load_config(pathlib.Path(args.config))

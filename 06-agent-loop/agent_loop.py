@@ -3,7 +3,14 @@ import json
 import pathlib
 
 
-FILES = ["labs/sample_docs/agents.txt", "labs/sample_docs/protocols.txt", "labs/sample_docs/memory.txt"]
+LAB_ROOT = pathlib.Path(__file__).resolve().parent
+REPO_ROOT = LAB_ROOT.parent
+SAMPLE_DOCS = REPO_ROOT / "sample_docs"
+FILES = [
+    str(SAMPLE_DOCS / "agents.txt"),
+    str(SAMPLE_DOCS / "protocols.txt"),
+    str(SAMPLE_DOCS / "memory.txt"),
+]
 
 
 def term_count(term, files):

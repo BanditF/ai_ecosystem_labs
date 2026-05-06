@@ -6,15 +6,20 @@ import sys
 import time
 
 
-OUTPUT_PATH = pathlib.Path("labs/11-capstone/capstone_run.json")
-SAMPLE_FILES = ["labs/sample_docs/agents.txt", "labs/sample_docs/protocols.txt"]
+LAB_ROOT = pathlib.Path(__file__).resolve().parent
+REPO_ROOT = LAB_ROOT.parent
+SAMPLE_DOCS = REPO_ROOT / "sample_docs"
+TASK_GRAPH_PATH = REPO_ROOT / "07-task-graph" / "tasks.json"
+PROTOCOL_SERVER_PATH = REPO_ROOT / "03-protocol-adapter" / "protocol_server.py"
+OUTPUT_PATH = LAB_ROOT / "capstone_run.json"
+SAMPLE_FILES = [str(SAMPLE_DOCS / "agents.txt"), str(SAMPLE_DOCS / "protocols.txt")]
 
 
 def approve_tool_call(arguments):
     term = arguments.get("term", "").lower()
     if term in {"password", "secret", "token"}:
         return {"allowed": False, "reason": "sensitive term"}
-    if not all(path.startswith("labs/sample_docs/") for path in arguments.get("files", [])):
+    if not all(pathlib.Path(path).resolve().parent == SAMPLE_DOCS.resolve() for path in arguments.get("files", [])):
         return {"allowed": False, "reason": "only sample docs are allowed"}
     return {"allowed": True, "reason": "read-only sample docs query"}
 
@@ -26,7 +31,7 @@ def protocol_call(name, arguments):
         "params": {"name": name, "arguments": arguments},
     }
     result = subprocess.run(
-        [sys.executable, "labs/03-protocol-adapter/protocol_server.py"],
+        [sys.executable, str(PROTOCOL_SERVER_PATH)],
         input=json.dumps(request) + "\n",
         text=True,
         capture_output=True,
@@ -39,7 +44,7 @@ def protocol_call(name, arguments):
 
 
 def ready_tasks():
-    data = json.loads(pathlib.Path("labs/07-task-graph/tasks.json").read_text(encoding="utf-8"))
+    data = json.loads(TASK_GRAPH_PATH.read_text(encoding="utf-8"))
     tasks = {task["id"]: task for task in data["tasks"]}
     return [
         task["id"]

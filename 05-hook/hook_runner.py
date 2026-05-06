@@ -5,7 +5,10 @@ import sys
 import time
 
 
-LOG_PATH = pathlib.Path("labs/05-hook/tool_calls.jsonl")
+LAB_ROOT = pathlib.Path(__file__).resolve().parent
+REPO_ROOT = LAB_ROOT.parent
+SAMPLE_DOCS = REPO_ROOT / "sample_docs"
+LOG_PATH = LAB_ROOT / "tool_calls.jsonl"
 BLOCKED_TERMS = {"password", "secret", "token"}
 
 
@@ -51,7 +54,7 @@ def run_tool(name, arguments):
 
 def main():
     term = sys.argv[1] if len(sys.argv) > 1 else "agent"
-    record = run_tool("term_count", {"term": term, "files": ["labs/sample_docs/agents.txt"]})
+    record = run_tool("term_count", {"term": term, "files": [str(SAMPLE_DOCS / "agents.txt")]})
     print(json.dumps(record, indent=2))
     return 0 if record["result"].get("ok") else 1
 

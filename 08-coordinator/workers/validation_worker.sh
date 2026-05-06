@@ -1,2 +1,3 @@
 #!/usr/bin/env sh
-python3 labs/08-coordinator/coordinator.py claim validation-worker validation
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+python3 "$SCRIPT_DIR/../coordinator.py" claim validation-worker validation

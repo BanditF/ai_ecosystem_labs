@@ -4,7 +4,8 @@ import json
 import pathlib
 
 
-DEFAULT_PATH = pathlib.Path("labs/07-task-graph/tasks.json")
+LAB_ROOT = pathlib.Path(__file__).resolve().parent
+DEFAULT_PATH = LAB_ROOT / "tasks.json"
 
 
 def load(path):

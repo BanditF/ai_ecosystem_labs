@@ -4,8 +4,9 @@ import pathlib
 import time
 
 
-CALLS_PATH = pathlib.Path("labs/10-governance/saved_calls.json")
-LOG_PATH = pathlib.Path("labs/10-governance/eval_results.jsonl")
+LAB_ROOT = pathlib.Path(__file__).resolve().parent
+CALLS_PATH = LAB_ROOT / "saved_calls.json"
+LOG_PATH = LAB_ROOT / "eval_results.jsonl"
 
 
 def evaluate(call):

@@ -5,8 +5,9 @@ import pathlib
 import time
 
 
-QUEUE_PATH = pathlib.Path("labs/08-coordinator/queue.json")
-EVENTS_PATH = pathlib.Path("labs/08-coordinator/events.jsonl")
+LAB_ROOT = pathlib.Path(__file__).resolve().parent
+QUEUE_PATH = LAB_ROOT / "queue.json"
+EVENTS_PATH = LAB_ROOT / "events.jsonl"
 
 
 def load_queue():

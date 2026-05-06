@@ -7,15 +7,18 @@ import sys
 import time
 
 
-ROOT = pathlib.Path("labs/12-persistent-platform")
+ROOT = pathlib.Path(__file__).resolve().parent
+REPO_ROOT = ROOT.parent
+SAMPLE_DOCS = REPO_ROOT / "sample_docs"
+TERM_COUNT_JSON_PATH = REPO_ROOT / "02-json-wrapper" / "term_count_json.py"
 STATE_PATH = ROOT / "state.json"
 SKILLS_PATH = ROOT / "skills.json"
 EVENTS_PATH = ROOT / "events.jsonl"
 MESSAGES_PATH = ROOT / "messages.jsonl"
 SAMPLE_FILES = [
-    "labs/sample_docs/agents.txt",
-    "labs/sample_docs/protocols.txt",
-    "labs/sample_docs/memory.txt",
+    str(SAMPLE_DOCS / "agents.txt"),
+    str(SAMPLE_DOCS / "protocols.txt"),
+    str(SAMPLE_DOCS / "memory.txt"),
 ]
 
 
@@ -84,7 +87,7 @@ def select_skill(text):
 
 def run_search(term):
     result = subprocess.run(
-        [sys.executable, "labs/02-json-wrapper/term_count_json.py", term, *SAMPLE_FILES],
+        [sys.executable, str(TERM_COUNT_JSON_PATH), term, *SAMPLE_FILES],
         capture_output=True,
         text=True,
         check=False,
