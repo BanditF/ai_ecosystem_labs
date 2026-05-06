@@ -9,12 +9,18 @@ LAB_ROOT = pathlib.Path(__file__).resolve().parent
 REPO_ROOT = LAB_ROOT.parent
 SAMPLE_DOCS = REPO_ROOT / "sample_docs"
 LOG_PATH = LAB_ROOT / "tool_calls.jsonl"
-BLOCKED_TERMS = {"password", "secret", "token"}
+DEFAULT_BLOCKED_TERMS = {"password", "secret", "token"}
 
 
-def before_tool_call(name, arguments):
+def blocked_terms(block_term=None):
+    if block_term:
+        return {block_term.lower()}
+    return DEFAULT_BLOCKED_TERMS
+
+
+def before_tool_call(name, arguments, block_term=None):
     term = str(arguments.get("term", "")).lower()
-    if term in BLOCKED_TERMS:
+    if term in blocked_terms(block_term):
         return {"allow": False, "reason": f"blocked sensitive term: {term}"}
     return {"allow": True, "reason": "read-only search"}
 
@@ -34,8 +40,8 @@ def fake_tool(arguments):
     return {"ok": True, "summary": {"total": total}}
 
 
-def run_tool(name, arguments):
-    decision = before_tool_call(name, arguments)
+def run_tool(name, arguments, executor=None, block_term=None):
+    decision = before_tool_call(name, arguments, block_term=block_term)
     record = {
         "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "tool": name,
@@ -47,7 +53,8 @@ def run_tool(name, arguments):
         after_tool_call(record)
         return record
 
-    record["result"] = fake_tool(arguments)
+    tool_executor = executor or fake_tool
+    record["result"] = tool_executor(arguments)
     after_tool_call(record)
     return record
 

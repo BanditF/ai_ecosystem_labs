@@ -11,7 +11,7 @@ LOG_PATH = LAB_ROOT / "eval_results.jsonl"
 
 def evaluate(call):
     checks = []
-    result = call.get("result", {})
+    result = call.get("result") or call.get("tool_result") or {}
     policy = call.get("policy", {})
     allowed = policy.get("allowed")
     successful = allowed is True and result.get("ok") is True
@@ -28,6 +28,9 @@ def evaluate(call):
         }
     )
 
+    if "ready_tasks" in call:
+        checks.append({"name": "ready_tasks_visible", "passed": bool(call.get("ready_tasks"))})
+
     return {
         "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "tool": call.get("tool"),
@@ -36,12 +39,20 @@ def evaluate(call):
     }
 
 
-def main():
-    calls = json.loads(CALLS_PATH.read_text(encoding="utf-8"))
-    results = [evaluate(call) for call in calls]
-    with LOG_PATH.open("w", encoding="utf-8") as log:
+def evaluate_calls(calls):
+    return [evaluate(call) for call in calls]
+
+
+def write_results(results, log_path=LOG_PATH):
+    with log_path.open("w", encoding="utf-8") as log:
         for result in results:
             log.write(json.dumps(result) + "\n")
+
+
+def main():
+    calls = json.loads(CALLS_PATH.read_text(encoding="utf-8"))
+    results = evaluate_calls(calls)
+    write_results(results)
     print(json.dumps({"results": results}, indent=2))
     return 0 if all(result["passed"] for result in results) else 1
 

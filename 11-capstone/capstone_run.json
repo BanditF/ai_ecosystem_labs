@@ -1,0 +1,103 @@
+{
+  "time": "2026-05-06T22:47:20Z",
+  "goal": "Find agent mentions in sample docs and leave an auditable trail.",
+  "host": {
+    "ok": true,
+    "tool": "term_count",
+    "requires_approval": true,
+    "approved": true,
+    "approved_by": "toy-user"
+  },
+  "tool": "term_count",
+  "arguments": {
+    "term": "agent",
+    "files": [
+      "/Users/brandonfuchs/Projects/personal/ai_ecosystem_labs/sample_docs/agents.txt",
+      "/Users/brandonfuchs/Projects/personal/ai_ecosystem_labs/sample_docs/protocols.txt"
+    ]
+  },
+  "policy": {
+    "allowed": true,
+    "reason": "read-only search"
+  },
+  "policy_config": {
+    "block_term": null,
+    "effective_blocked_terms": [
+      "password",
+      "secret",
+      "token"
+    ]
+  },
+  "ready_tasks": [
+    "add-hook"
+  ],
+  "tool_result": {
+    "ok": true,
+    "items": [
+      {
+        "file": "/Users/brandonfuchs/Projects/personal/ai_ecosystem_labs/sample_docs/agents.txt",
+        "count": 2
+      },
+      {
+        "file": "/Users/brandonfuchs/Projects/personal/ai_ecosystem_labs/sample_docs/protocols.txt",
+        "count": 0
+      }
+    ],
+    "summary": {
+      "total": 2
+    },
+    "errors": []
+  },
+  "hook": {
+    "time": "2026-05-06T22:47:20Z",
+    "tool": "term_count",
+    "arguments": {
+      "term": "agent",
+      "files": [
+        "/Users/brandonfuchs/Projects/personal/ai_ecosystem_labs/sample_docs/agents.txt",
+        "/Users/brandonfuchs/Projects/personal/ai_ecosystem_labs/sample_docs/protocols.txt"
+      ]
+    },
+    "decision": {
+      "allow": true,
+      "reason": "read-only search"
+    },
+    "result": {
+      "ok": true,
+      "items": [
+        {
+          "file": "/Users/brandonfuchs/Projects/personal/ai_ecosystem_labs/sample_docs/agents.txt",
+          "count": 2
+        },
+        {
+          "file": "/Users/brandonfuchs/Projects/personal/ai_ecosystem_labs/sample_docs/protocols.txt",
+          "count": 0
+        }
+      ],
+      "summary": {
+        "total": 2
+      },
+      "errors": []
+    }
+  },
+  "eval": {
+    "time": "2026-05-06T22:47:20Z",
+    "tool": "term_count",
+    "passed": true,
+    "checks": [
+      {
+        "name": "has_policy_decision",
+        "passed": true
+      },
+      {
+        "name": "successful_calls_include_summary",
+        "passed": true,
+        "applies": true
+      },
+      {
+        "name": "ready_tasks_visible",
+        "passed": true
+      }
+    ]
+  }
+}
