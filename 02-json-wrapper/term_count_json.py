@@ -23,6 +23,7 @@ def count_term(term, files):
 
     return {
         "ok": not errors,
+        "version": "1.0",
         "tool": "term_count",
         "input": {"term": term, "files": files},
         "items": items,
@@ -41,6 +42,7 @@ def main():
     if args.dry_run:
         result = {
             "ok": True,
+            "version": "1.0",
             "tool": "term_count",
             "dry_run": True,
             "planned": {"term": args.term, "files": args.files},
