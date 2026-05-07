@@ -4,6 +4,28 @@ Runnable lab files for the [AI Tooling Field Guide](https://github.com/BanditF/e
 
 Each lab is a deliberately small Python script that builds one piece of the AI tooling stack — model access, CLI wrappers, protocol adapters, agents, governance, and more. The goal is not polished software. It is a clear, inspectable artifact that makes one concept concrete.
 
+## Quick start
+
+```bash
+git clone https://github.com/BanditF/ai_ecosystem_labs.git
+cd ai_ecosystem_labs
+python3 run_all.py
+```
+
+**Python 3.9+ required.** Most labs run with no extra packages. One lab (03b) needs `pip install "mcp[cli]"`.
+
+To run a single lab:
+
+```bash
+python3 00-model-access/model_cli.py hello
+```
+
+To install optional dependencies:
+
+```bash
+bash setup.sh
+```
+
 ## Labs
 
 | Lab | Concept |
@@ -12,6 +34,7 @@ Each lab is a deliberately small Python script that builds one piece of the AI t
 | [01-cli](01-cli/) | Minimal CLI wrapper around a model call |
 | [02-json-wrapper](02-json-wrapper/) | Structured output and response parsing |
 | [03-protocol-adapter](03-protocol-adapter/) | Protocol adapter shape — tools, resources, prompts |
+| [03b-real-mcp](03b-real-mcp/) | Real MCP server with the official Python SDK* |
 | [04-skill](04-skill/) | Skill: reusable packaged behavior for a host |
 | [05-hook](05-hook/) | Hook: intercept and modify host behavior |
 | [06-agent-loop](06-agent-loop/) | The observe → decide → act → evaluate loop |
@@ -29,13 +52,11 @@ Each lab is a deliberately small Python script that builds one piece of the AI t
 | [18-finetune-prep](18-finetune-prep/) | Fine-tuning dataset preparation and validation |
 | [19-token-budget](19-token-budget/) | Token counting, cost comparison, and spend projection |
 
-## Setup
+* `03b-real-mcp` needs the optional `mcp[cli]` package.
 
-No external dependencies required for most labs — they use a toy model backend so you can run them without an API key. Labs 12 and 13 have their own notes.
+## Setup notes
 
-```bash
-python3 00-model-access/model_cli.py "hello"
-```
+Most labs use only the Python standard library. Labs 12 and 13 write local state, and lab 13 starts a local server during the exercise.
 
 Run all labs in sequence:
 

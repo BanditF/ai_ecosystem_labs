@@ -1,0 +1,5 @@
+# Most labs run with standard library Python 3 only.
+# Install these only for labs that need them:
+
+# Lab 03b (real MCP server)
+mcp[cli]>=1.0.0
