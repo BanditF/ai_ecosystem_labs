@@ -160,6 +160,12 @@ def main():
     )
     run_json("12 platform tick", [py, rel("12-persistent-platform/gateway.py"), "tick"])
     run_local_broker(py)
+    run("14 prompt patterns", [py, rel("14-prompt-patterns/prompt_patterns.py"), "What is the capital of Germany?"])
+    run("15 rag pipeline", [py, rel("15-rag-pipeline/rag_pipeline.py")])
+    run("16 eval suite", [py, rel("16-eval-suite/eval_suite.py")])
+    run("17 model selector", [py, rel("17-model-selector/model_selector.py")])
+    run("18 finetune prep", [py, rel("18-finetune-prep/finetune_prep.py")])
+    run("19 token budget", [py, rel("19-token-budget/token_budget.py")])
     print("\nAll lab smoke checks ran. Some artifacts were intentionally written for inspection.")
 
 

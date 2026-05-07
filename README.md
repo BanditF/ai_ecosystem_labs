@@ -22,6 +22,12 @@ Each lab is a deliberately small Python script that builds one piece of the AI t
 | [11-capstone](11-capstone/) | Full small stack end to end |
 | [12-persistent-platform](12-persistent-platform/) | State persistence across agent runs |
 | [13-local-broker](13-local-broker/) | Local credential broker for API keys |
+| [14-prompt-patterns](14-prompt-patterns/) | Zero-shot, few-shot, chain-of-thought, and structured output prompting |
+| [15-rag-pipeline](15-rag-pipeline/) | Retrieval-augmented generation pipeline in pure Python |
+| [16-eval-suite](16-eval-suite/) | Systematic eval runner with assertions, scoring, and filtering |
+| [17-model-selector](17-model-selector/) | Model comparison by cost, speed, privacy, and fit |
+| [18-finetune-prep](18-finetune-prep/) | Fine-tuning dataset preparation and validation |
+| [19-token-budget](19-token-budget/) | Token counting, cost comparison, and spend projection |
 
 ## Setup
 
