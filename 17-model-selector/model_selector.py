@@ -7,6 +7,7 @@ import sys
 import json
 
 # ── model catalog (prices in $ per 1M tokens, as of early 2025) ──
+# Pricing last verified: early 2025. Verify at provider pricing pages before use.
 MODELS = [
     {
         "name": "gpt-4o",
@@ -91,9 +92,9 @@ MODELS = [
 def score_model(model: dict, requirements: dict) -> float:
     score = 0.0
 
-    # Context window
-    if model["context_k"] >= requirements.get("min_context_k", 0):
-        score += 2.0
+    # Hard constraint — filter out models below minimum context
+    if model["context_k"] < requirements.get("min_context_k", 0):
+        return 0.0
 
     # Privacy
     if requirements.get("private") and not model["local"]:

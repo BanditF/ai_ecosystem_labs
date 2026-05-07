@@ -8,6 +8,7 @@ Uses word-based approximation by default; uses tiktoken if installed.
 from typing import Dict, List
 
 
+# Pricing last verified: early 2025. Verify at provider pricing pages before use.
 PROVIDERS: Dict[str, Dict[str, float]] = {
     "gpt-4o": {"input": 2.50, "output": 10.00, "context_k": 128},
     "gpt-4o-mini": {"input": 0.15, "output": 0.60, "context_k": 128},

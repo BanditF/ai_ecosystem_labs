@@ -14,9 +14,9 @@ REAL_CHAT_COMPLETIONS_ENDPOINT = "https://api.openai.com/v1/chat/completions"
 
 # ── mock response for demo without API key ──────────────────
 MOCK_RESPONSES = {
-    "zero_shot": "Paris",
+    "zero_shot": "Berlin",
     "few_shot": "Berlin",
-    "cot": "Step 1: Identify the country. The question asks about Germany.\nStep 2: Recall the capital. Germany's capital is Berlin.\nAnswer: Berlin",
+    "cot": "Step 1: The question asks about Germany.\nStep 2: Germany's capital is Berlin.\nAnswer: Berlin",
     "structured": '{"capital": "Berlin", "country": "Germany", "confidence": "high"}',
 }
 

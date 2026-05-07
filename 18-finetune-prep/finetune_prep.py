@@ -72,7 +72,14 @@ def validate_dataset(examples: list[dict]) -> dict:
         if errs:
             errors.append({"index": i, "errors": errs})
 
-    token_counts = [sum(len(m["content"].split()) for m in ex["messages"]) for ex in examples]
+    token_counts = []
+    for ex in examples:
+        messages = ex.get("messages")
+        if not isinstance(messages, list):
+            continue
+        token_counts.append(
+            sum(len(str(m.get("content", "")).split()) for m in messages if isinstance(m, dict))
+        )
 
     return {
         "total": len(examples),
